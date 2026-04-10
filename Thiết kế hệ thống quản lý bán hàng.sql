@@ -1,0 +1,37 @@
+-- Tạo database SalesDB
+CREATE DATABASE SalesDB;
+
+-- Tạo schema sales
+CREATE schema sales;
+
+-- Tạo bảng Customers
+CREATE TABLE sales.Customers (
+    customer_id SERIAL PRIMARY KEY,
+    first_name VARCHAR(50) NOT NULL,
+    last_name VARCHAR(50) NOT NULL,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    phone VARCHAR(20)
+);
+
+-- Tạo bảng Products
+CREATE TABLE sales.Products (
+    product_id SERIAL PRIMARY KEY,
+    product_name VARCHAR(100) NOT NULL,
+    price NUMERIC(10,2) NOT NULL,
+    stock_quantity INT NOT NULL
+);
+
+-- Tạo bảng Orders
+CREATE TABLE sales.Orders (
+    order_id SERIAL PRIMARY KEY,
+    customer_id INT REFERENCES sales.Customers(customer_id),
+    order_date DATE NOT NULL
+);
+
+-- Tạo bảng OrderItems
+CREATE TABLE sales.OrderItems (
+    order_item_id SERIAL PRIMARY KEY,
+    order_id INT REFERENCES sales.Orders(order_id),
+    product_id INT REFERENCES sales.Products(product_id),
+    quantity INT CHECK (quantity >= 1)
+);
